@@ -1,0 +1,38 @@
+---
+title: "Counts"
+author: "Kokulapalan Wimalanathan"
+date: "9/27/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+library(knitr)
+library(data.table)
+library(reshape2)
+```
+
+
+```{r Raw Counts, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+raw <- fread("raw_reads.count")
+setorder(raw,geno)
+raw_summary = raw[,list(reads=sum(count)),by=list(geno,pheno)]
+raw_out <- data.table(dcast(raw_summary,formula = geno~pheno))
+
+filt <- fread("filt_reads.count")
+filt_summary = filt[,list(reads=sum(count)),by=list(geno,pheno)]
+filt_out = data.table(dcast(filt_summary,formula = geno~pheno))
+filt_out
+
+filt_prop <- round(filt_out[,.(mut,norm)]/raw_out[,.(mut,norm)],digits = 2)
+colnames(filt_prop) <- c("filt.mut","filt.norm")
+out_dt <- cbind(raw_out,filt_prop)
+
+
+out_dt
+#kable(out_dt, caption = "Read Count Summary")
+```

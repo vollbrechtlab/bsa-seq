@@ -1,0 +1,14 @@
+*fq.gz
+*.sam
+*.bam
+*.count
+*.length
+*.out
+*.png
+*.fa
+*.log
+*.mpl
+*.nuc
+*.tsv
+*.html
+*.bai
