@@ -2,14 +2,16 @@
 mm2idx="/home/gokul/lab_data/mm2_idx/maize_b73_agp4.sr.mmi"
 for file in `find filt/ -iname "*fq.gz"`
 do
-  out_sam="sam/"`basename $file | sed 's/fq.gz/sam/g'`
-  out_bam="sam/"`basename $file | sed 's/fq.gz/bam/g'`
+  base_name=`basename $file | sed 's/.fq.gz//g'`
+  outfile=`find sam -iname "$base_name*" | sort | head -n 1`
+  out="sam/$base_name.sam"
   echo $out
-  if [ ! -f "$out_sam" ] && [ ! -f "$out_bam" ]
+  if [ -z "$outfile" ]
   then
-    minimap2 -ax sr -t 8 $mm2idx $file > $out_sam
+    echo "Processing $file"
+    minimap2 -ax sr -t 8 $mm2idx $file > $out
   else
-    echo "The $out_bam$out_sam exists remove to regenerate"
+    echo "The $outfile exists remove to regenerate"
   fi
   # exit
 done

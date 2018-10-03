@@ -27,12 +27,22 @@ filt <- fread("filt_reads.count")
 filt_summary = filt[,list(reads=sum(count)),by=list(geno,pheno)]
 filt_out = data.table(dcast(filt_summary,formula = geno~pheno))
 filt_out
-
 filt_prop <- round(filt_out[,.(mut,norm)]/raw_out[,.(mut,norm)],digits = 2)
 colnames(filt_prop) <- c("filt.mut","filt.norm")
 out_dt <- cbind(raw_out,filt_prop)
 
+aligned <- fread("aligned_reads.count")
+aligned_summary = aligned[,list(reads=sum(count)),by=list(geno,pheno)]
+aligned_out = data.table(dcast(aligned_summary,formula = geno~pheno))
+aligned_out
+raw_out
+aligned_prop <- round(aligned_out[,.(mut,norm)]/raw_out[,.(mut,norm)],digits = 2)
+aligned_prop
+colnames(aligned_prop) <- c("align.mut","align.norm")
+
+out_dt <- cbind(out_dt,aligned_prop)
 
 out_dt
+
 #kable(out_dt, caption = "Read Count Summary")
 ```
