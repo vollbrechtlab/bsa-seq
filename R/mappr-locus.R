@@ -21,8 +21,8 @@ mappr_locus <- function(ed4_file,sample_name,min_dep,tmp_wid,sliding_wind){
     starts=seq(0,chr_length,sliding_wind)
     region_ed4 <- chr_ed4[chr==chr_name]
     
-    #out_stat <- mclapply(starts,function(start,chr_prop,chr_ed4,tmp_wid,region_ed4){
-    out_stat <- lapply(starts,function(start,chr_prop,chr_ed4,tmp_wid,region_ed4){
+    out_stat <- mclapply(starts,function(start,chr_prop,chr_ed4,tmp_wid,region_ed4){
+    #out_stat <- lapply(starts,function(start,chr_prop,chr_ed4,tmp_wid,region_ed4){
       end=start+tmp_wid
       mid=(start+end)/2
       locus_ed4 <- region_ed4[pos>=start & pos <= end]
@@ -30,8 +30,8 @@ mappr_locus <- function(ed4_file,sample_name,min_dep,tmp_wid,sliding_wind){
       # print(tmp_mat)
       ft_res <- fisher.test(tmp_mat)
       out <- c(mid=mid,pval=ft_res$p.value,start=start,end=end)
-    },chr_prop,chr_ed4,tmp_wid,region_ed4)
-    #},chr_prop,chr_ed4,tmp_wid,region_ed4,mc.cores = 4)
+    #},chr_prop,chr_ed4,tmp_wid,region_ed4)
+    },chr_prop,chr_ed4,tmp_wid,region_ed4,mc.cores = 4)
     out_dt <- data.table(do.call(rbind,out_stat))
     out_dt[,chr:=chr_name]
   })
@@ -40,6 +40,7 @@ mappr_locus <- function(ed4_file,sample_name,min_dep,tmp_wid,sliding_wind){
   eval_dt[,adj.pval:=p.adjust(pval,method = "bonferroni")]
   eval_dt[,log.pval:=-10*log(adj.pval,base = 10)]
   eval_dt[,chr:=factor(chr,levels = naturalsort(v4_chr$name))]
+  eval_dt[,sample:=sample_name]
   setcolorder(eval_dt,out_cols)
   
   out_file <-paste("mappr/",sample_name,".",min_dep,".mappr-locus.tsv",sep="")

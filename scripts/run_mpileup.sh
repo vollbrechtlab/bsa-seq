@@ -15,7 +15,12 @@ do
 	#| grep -v '+'
 	if [ ! -f "$out.$min_dep.mpl" ]
 	then
-  	samtools mpileup -I --ff UNMAP --ff SECONDARY --ff QCFAIL --ff DUP -Q 20 -q 50 -d 1000 $f | awk "\$4>=$min_dep" | grep -v '\+' > $out.$min_dep.mpl
-  	python mpileup_analysis.py $out.$min_dep.mpl $min_dep > $out.$min_dep.nuc
+		samtools mpileup -I --ff UNMAP --ff SECONDARY --ff QCFAIL --ff DUP -Q 20 -q 50 -d 1000 $f | awk "\$4>=$min_dep" | grep -v '\+' > $out.$min_dep.mpl && \
+		python scripts/mpileup_analysis.py $out.$min_dep.mpl $min_dep > $out.$min_dep.nuc
+	fi
+	
+	if [ ! -f "$out.$min_dep.nuc" ]
+	then
+		python scripts/mpileup_analysis.py $out.$min_dep.mpl $min_dep > $out.$min_dep.nuc
 	fi
 done
