@@ -1,0 +1,5 @@
+install.packages("data.table")
+install.packages("ggplot2")
+install.packages("naturalsort")
+install.packages("reshape2")
+install.packages("locfit")
