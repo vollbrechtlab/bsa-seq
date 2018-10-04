@@ -9,7 +9,6 @@ mappr_locus("ed4/trial1.6792.10.tsv","trial1.6792",10,2000000,1000000)
 mappr("mpileup/trial1.6876_mut.10.nuc","mpileup/trial1.6876_norm.10.nuc","trial1.6876",10)
 mappr_locus("ed4/trial1.6876.10.tsv","trial1.6876",10,2000000,1000000)
 
-
 mappr("mpileup/trial1.6972_mut.10.nuc","mpileup/trial1.6972_norm.10.nuc","trial1.6972",10)
 mappr_locus("ed4/trial1.6972.10.tsv","trial1.6972",10,2000000,1000000)
 
@@ -18,7 +17,6 @@ mappr_locus("ed4/trial1.fea2-NC350.10.tsv","trial1.fea2-NC350",10,2000000,100000
 
 mappr("mpileup/trial1.ra3-ki11_str.10.nuc","mpileup/trial1.ra3-ki11_wk.10.nuc","trial1.ra3-Ki11",10)
 mappr_locus("ed4/trial1.ra3-Ki11.10.tsv","trial1.ra3-Ki11",10,20000000,5000000)
-
 
 #trial2
 
