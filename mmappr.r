@@ -24,7 +24,7 @@ library("locfit")
 
 args <- commandArgs(trailingOnly = TRUE)
 #args <- c("mpileup/ra3_ki11_str.30.nuc","mpileup/ra3_ki11_wk.30.nuc","plots/ra3_ki11","ra3_ki11 Data", 30)
-args <- c("mpileup/trial1.6792_mut.10.nuc","mpileup/trial1.6792_norm.10.nuc","6792","6792 Data", 10)
+args <- c("mpileup/trial1.6792_mut.10.nuc","mpileup/trial1.6792_norm.10.nuc","6792","6792 Data", 20)
 
 wt_f <- args[1]
 mt_f <- args[2]
@@ -43,7 +43,7 @@ print("Loading Mutant data")
 mt <- fread(mt_f,header = T)
 mt[,(cols):=lapply(.SD,"/",dep),.SDcols = cols]
 
-shared_pos <- merge(wt[,.(chr,pos)],mt[,.(chr,pos)],by = c("chr","pos"))
+shared_pos <- merge(wt[dep>min_dep,.(chr,pos)],mt[dep>min_dep,.(chr,pos)],by = c("chr","pos"))
 
 wt_filt <- merge(wt,shared_pos,by = c("chr","pos"))
 mt_filt <- merge(mt,shared_pos,by = c("chr","pos"))
