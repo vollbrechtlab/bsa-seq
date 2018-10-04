@@ -24,7 +24,7 @@ library("locfit")
 
 args <- commandArgs(trailingOnly = TRUE)
 #args <- c("mpileup/ra3_ki11_str.30.nuc","mpileup/ra3_ki11_wk.30.nuc","plots/ra3_ki11","ra3_ki11 Data", 30)
-args <- c("mpileup/trial1.6792_mut.10.nuc","mpileup/trial1.6792_norm.10.nuc","6792","6792 Data", 20)
+args <- c("mpileup/trial1.6792_mut.10.nuc","mpileup/trial1.6792_norm.10.nuc","6792","6792 Data", 10)
 
 wt_f <- args[1]
 mt_f <- args[2]
