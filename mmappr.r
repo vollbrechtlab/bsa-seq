@@ -24,7 +24,7 @@ library("locfit")
 
 args <- commandArgs(trailingOnly = TRUE)
 #args <- c("mpileup/ra3_ki11_str.30.nuc","mpileup/ra3_ki11_wk.30.nuc","plots/ra3_ki11","ra3_ki11 Data", 30)
-args <- c("mpileup/trial2.6876_mut.30.nuc","mpileup/trial2.6876_norm.30.nuc","6876","6876 Data", 30)
+args <- c("mpileup/trial1.6792_mut.10.nuc","mpileup/trial1.6792_norm.10.nuc","6792","6792 Data", 20)
 
 wt_f <- args[1]
 mt_f <- args[2]
@@ -70,9 +70,11 @@ data.table::setorder(tmp_ed,chr,pos)
 
 write.table(chr_ed4,file = paste("ed4/",args[3],".",min_dep,".tsv",sep = ""),quote = F,sep = "\t",row.names = F)
 
+dim(tmp_ed)
+tmp_ed[ed4>0]
 
 plot_f <- paste("plots/",args[3],".ed4.",min_dep,".point.png",sep="")
-p <- ggplot(tmp_ed,aes(x=pos,y=ed4,color=chr))
+p <- ggplot(tmp_ed[ed4>0],aes(x=pos,y=ed4,color=chr))
 p <- p + geom_point() 
 p <- p + facet_grid(.~chr,space = "free_x",scales = "free_x" ) 
 p <- p + scale_color_manual(values = rep(c("blue","red"),5))
@@ -83,7 +85,7 @@ ggsave(plot_f,width = wid,height = hei,dpi = resol)
 
 
 plot_f <- paste("plots/",args[3],".ed4.",min_dep,".smooth.png",sep="")
-nn_prop=0.2
+nn_prop=0.1
 p <- ggplot(tmp_ed,aes(x=pos,y=ed4,color=chr))
 p <- p + stat_smooth(method=locfit,formula=y~lp(x,nn=nn_prop)) #geom_point()
 p <- p + scale_x_continuous(breaks=seq(min(tmp_ed$pos),max(tmp_ed$pos),by=20000000),labels=comma)

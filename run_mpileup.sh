@@ -7,12 +7,15 @@ then
 	exit
 fi
 
-for f in `find sam/ -iname "*bam" | grep -v 6876`
+for f in `find sam/ -iname "*bam" | sort -V`
 do
 	out=`echo $f | sed -e 's/.bam//g' -e 's/sam/mpileup/g'`
 	echo $out $f
 	#nuc=`echo $out | sed 's/mpl$/nuc/g'`
 	#| grep -v '+'
-	samtools mpileup -I --ff UNMAP --ff SECONDARY --ff QCFAIL --ff DUP -Q 20 -q 50 -d 1000 $f | awk "\$4>=$min_dep" | grep -v '\+' > $out.$min_dep.mpl
-	python mpileup_analysis.py $out.$min_dep.mpl $min_dep > $out.$min_dep.nuc
+	if [ ! -f "$out.$min_dep.mpl" ]
+	then
+  	samtools mpileup -I --ff UNMAP --ff SECONDARY --ff QCFAIL --ff DUP -Q 20 -q 50 -d 1000 $f | awk "\$4>=$min_dep" | grep -v '\+' > $out.$min_dep.mpl
+  	python mpileup_analysis.py $out.$min_dep.mpl $min_dep > $out.$min_dep.nuc
+	fi
 done

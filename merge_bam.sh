@@ -5,7 +5,7 @@ bam_files=`find sam -iname "*bam" | sed -e 's/sam.//g' -e 's/.bam//g' -e 's/.*[.
 for file in $bam_files
 do
   infiles=`find sam -iname "*$file*bam"`
-  outfile="bam/$file.bam"
+  outfile="merged/$file.bam"
   samtools merge -@ 8 -l 9 $outfile $infiles && \
   samtools index $outfile
 
