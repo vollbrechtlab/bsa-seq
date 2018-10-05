@@ -3,6 +3,8 @@ library("parallel")
 
 get_genome_cov <- function(basename){
   genome_data <- fread("genome/maize_v4.chrs.fa.fai")
+  fai_cols <- c("name", "length", "offset", "linebases", "linewidth")
+  colnames(genome_data) <- fai_cols
   genome_size <- sum(genome_data$length)
   
   mut_file = dir(path="cov",pattern = paste(basename,"_mut*",sep=""),full.names = T)
@@ -15,14 +17,14 @@ get_genome_cov <- function(basename){
     norm_file = dir(path="cov",pattern = paste(basename,"_wk*",sep=""),full.names = T)
   }
   
-  # print(mut_file)
-  # print(norm_file)
+  print(mut_file)
+  print(norm_file)
   
   mut_data  <- fread(mut_file)
   norm_data <- fread(norm_file)
   
-  mut_filt <- mut_data[depth>=30 & depth <=250]
-  norm_filt <- norm_data[depth>=30 & depth <=250]
+  mut_filt <- mut_data#[depth>=30 & depth <=250]
+  norm_filt <- norm_data#[depth>=30 & depth <=250]
   
   all_poss <- merge(mut_filt[,.(chr,pos)],norm_filt[,.(chr,pos)])
   (NROW(all_poss)/genome_size)*100

@@ -16,26 +16,26 @@ knitr::opts_chunk$set(
 library(knitr)
 library(data.table)
 library(reshape2)
-source("depth_calc.R")
+source("R/depth_calc.R")
 ```
 
 # Trial 1
 ```{r Trial 1 Sequence Stats, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 tmp_trial="trial1"
-raw <- fread("raw_reads.count")
+raw <- fread("tables/raw_reads.count")
 setorder(raw,geno)
 raw_out <- data.table(dcast(raw[trial==tmp_trial],formula = geno~pheno))
 colnames(raw_out) <- c("geno","mut.raw","norm.raw")
 
-filt <- fread("filt_reads.count")
+filt <- fread("tables/filt_reads.count")
 filt_out = data.table(dcast(filt[trial==tmp_trial],formula = geno~pheno))
-filt_prop <- round(filt_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)],digits = 4)
+filt_prop <- round(filt_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)]*100,digits = 4)
 colnames(filt_prop) <- c("mut.filt","norm.filt")
 out_dt <- cbind(raw_out,filt_prop)
 
-aligned <- fread("aligned_reads.count")
+aligned <- fread("tables/aligned_reads.count")
 aligned_out = data.table(dcast(aligned[trial==tmp_trial],formula = geno~pheno))
-aligned_prop <- round(aligned_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)],digits = 4)
+aligned_prop <- round(aligned_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)]*100,digits = 4)
 colnames(aligned_prop) <- c("mut.align","norm.align")
 out_dt <- cbind(out_dt,aligned_prop)
 
@@ -45,10 +45,11 @@ cov_stat <- lapply(out_dt$geno,function(x){
 })
 cov_dt <- data.table(do.call(rbind,cov_stat))
 cov_dt[,geno:=gsub('.*[.]','',geno)]
+cov_dt
 
 out_dt <- merge(out_dt,cov_dt)
 
-out_col_order <- c("geno",paste("mut",c("raw","filt","align","cov"),sep="."),paste("norm",c("raw","align","filt","cov"),sep="."),"shared.cov")
+out_col_order <- c("geno",paste("mut",c("raw","filt","align","cov"),sep="."),paste("norm",c("raw","filt","align","cov"),sep="."),"shared.cov")
 setcolorder(out_dt,out_col_order)
 
 
@@ -58,13 +59,13 @@ kable(out_dt, caption = "Read Count Summary")
 # Trial 2
 ```{r Trial 2 Sequence Stats, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 tmp_trial="trial2"
-raw <- fread("raw_reads.count")
+raw <- fread("tables/raw_reads.count")
 setorder(raw,geno)
 raw_out <- data.table(dcast(raw[trial==tmp_trial],formula = geno~pheno))
 colnames(raw_out) <- c("geno","mut.raw","norm.raw")
 raw_out
 
-filt <- fread("filt_reads.count")
+filt <- fread("tables/filt_reads.count")
 filt_out = data.table(dcast(filt[trial==tmp_trial],formula = geno~pheno))
 filt_prop <- round(filt_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)],digits = 4)*100
 colnames(filt_prop) <- c("mut.filt","norm.filt")
@@ -72,7 +73,7 @@ out_dt <- cbind(raw_out,filt_prop)
 out_dt
 
 
-aligned <- fread("aligned_reads.count")
+aligned <- fread("tables/aligned_reads.count")
 aligned_out = data.table(dcast(aligned[trial==tmp_trial],formula = geno~pheno))
 aligned_prop <- round(aligned_out[,.(mut,norm)]/raw_out[,.(mut.raw,norm.raw)],digits = 4)*100
 colnames(aligned_prop) <- c("mut.align","norm.align")
