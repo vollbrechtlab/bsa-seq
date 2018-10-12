@@ -16,3 +16,6 @@
 *.docx
 *fai
 *.pdf
+.Rhistory
+*.vcf.gz
+*.vcf.gz.csi
